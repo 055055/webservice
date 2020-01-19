@@ -1,0 +1,25 @@
+package com.toyproject.webservice.config.auth.dto;
+
+import com.toyproject.webservice.domain.user.User;
+import lombok.Getter;
+
+import java.io.Serializable;
+
+/**
+ * 인증된 사용자 정보만 필요. 직렬화 구현 때문에 User Entity와 분리
+ */
+@Getter
+public class SessionUser implements Serializable {
+
+    private String name;
+    private String email;
+    private String picture;
+
+    public SessionUser(User user){
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.picture = user.getPicture();
+    }
+
+
+}

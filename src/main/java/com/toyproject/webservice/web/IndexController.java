@@ -1,5 +1,7 @@
 package com.toyproject.webservice.web;
 
+import com.toyproject.webservice.config.auth.dto.SessionUser;
+import com.toyproject.webservice.domain.user.User;
 import com.toyproject.webservice.service.posts.PostsService;
 import com.toyproject.webservice.web.dto.PostsListResponseDto;
 import com.toyproject.webservice.web.dto.PostsResponseDto;
@@ -9,14 +11,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
     private final PostsService postsService;
-
+    private final HttpSession httpSession;
     @GetMapping("/")
     public String index(Model model){
         model.addAttribute("posts",postsService.findAllDesc());
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if(user != null){
+            model.addAttribute("userName",user.getName());
+        }
+
         return "index";
     }
 
@@ -31,4 +40,6 @@ public class IndexController {
         model.addAttribute("post",dto);
         return "posts-update";
     }
+
+
 }
